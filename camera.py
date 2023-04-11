@@ -94,7 +94,7 @@ from typing import List, Dict
 class VideoCamera:
     def __init__(self) -> None:
         self.video = cv2.VideoCapture(0)
-        self.model = YOLO('yolo.pt')
+        self.model = YOLO('assets/yolo.pt')
         self.pred_thread = threading.Thread(target=self.detect_regions_of_interest)
         self.last_img = None
         self.last_regions_of_interest: List[Dict[str, float]] = []

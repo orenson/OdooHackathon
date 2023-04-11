@@ -40,14 +40,14 @@ class User(object):
 
 
     def generate_banner(self, text='Beers I drank:\n\n- Heineken (Netherlands, 2022-03-31)\n- Guinness (Ireland, 2022-03-30)\n- Chimay (Belgium, 2022-03-29)'):
-        bg_img = Image.open('banner_background.jpeg')
+        bg_img = Image.open('assets/img/banner_background.jpeg')
         bg_width, bg_height = bg_img.size
         bg_img = bg_img.resize((bg_width*3, bg_height*3))
         
         img = Image.new('RGB', (bg_img.size), color='white')
         img.paste(bg_img, (0, 0))
-        font = ImageFont.truetype('arial.ttf', size=30)
-        bold_font = ImageFont.truetype('arialbd.ttf', size=30)
+        font = ImageFont.truetype('assets/fonts/arial.ttf', size=30)
+        bold_font = ImageFont.truetype('assets/fonts/arialbd.ttf', size=30)
         draw = ImageDraw.Draw(img)
         text_size = draw.textsize(text, font=font)
 
@@ -62,7 +62,7 @@ class User(object):
                 draw.text((x, y+20), line, font=bold_font, fill='white')
             y += font.getsize(line)[1]
 
-        user_font = ImageFont.truetype('arial.ttf', size=40)
+        user_font = ImageFont.truetype('assets/fonts/arial.ttf', size=40)
         user_text_size = draw.textsize(self.pseudo, font=user_font)
         user_x = 50
         user_y = bg_height*3 - user_text_size[1] - 50

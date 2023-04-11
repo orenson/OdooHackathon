@@ -66,7 +66,7 @@ modal_beer = html.Div(dbc.Modal([dbc.ModalHeader(html.H1(children="New beer degu
 
 subtitle = html.P(children="Scan / select a beer cap", style={'textAlign': 'center'})
 stream_block = html.Div([html.Img(src="/video_feed", id='stream', style={'width': '100%', 'borderRadius': '5px'})])
-beers = pd.read_csv('beers.csv', header=0, sep=';')
+beers = pd.read_csv('assets/beers.csv', header=0, sep=';')
 select_block = dcc.Dropdown(sorted(beers['name'].values), id='caps_select', placeholder="Select a beer", style=input_style)
 btn_add = html.Button("Add to my Caps'ules", id='add_btn', style=btn_style)
 left_pannel = dbc.Card([stream_block, select_block, btn_add], body=True)
@@ -141,11 +141,11 @@ def create_account(n_reg, n_save, n_login, n_add, n_save_beer, pseudo, pass1, pa
     changed_id = ctx.triggered_id
 
     if changed_id == 'save':
-        csv = pd.read_csv('users.csv', header=0)
+        csv = pd.read_csv('data/users.csv', header=0)
         if pass1 == pass2 and pseudo not in csv['pseudo'].values:
             hashed_pass = hashlib.sha256(pass1.encode()).hexdigest()
             csv = pd.concat([csv, pd.DataFrame.from_dict({'pseudo':[pseudo], 'password':[hashed_pass], 'lastlog':[datetime.now()]})], ignore_index=True)
-            csv.to_csv('users.csv', index=False)
+            csv.to_csv('data/users.csv', index=False)
             user_cls = User(pseudo)
             with open('data/'+pseudo, 'wb') as outp:
                 pickle.dump(user_cls, outp, pickle.HIGHEST_PROTOCOL)
@@ -159,14 +159,14 @@ def create_account(n_reg, n_save, n_login, n_add, n_save_beer, pseudo, pass1, pa
         return (True, no_update, no_update, no_update, no_update, no_update, no_update, no_update, no_update, no_update)
 
     elif changed_id == 'login_btn':
-        csv = pd.read_csv('users.csv', header=0)
+        csv = pd.read_csv('data/users.csv', header=0)
         if pseudo_log in csv['pseudo'].values:
             hashed_passw = csv.loc[csv['pseudo']==pseudo_log, 'password']
             if hashlib.sha256(pass_log.encode()).hexdigest() == hashed_passw.iloc[0]:
                 print("Password is correct!")
                 info_txt = html.P('Successfully logged as : '+pseudo_log)
                 csv.loc[csv["pseudo"]==pseudo_log, "lastlog"] = datetime.now()
-                csv.to_csv("users.csv", index=False)
+                csv.to_csv("data/users.csv", index=False)
                 return(no_update, True, info_txt, no_update, no_update, json.dumps({'user':pseudo_log}), False, False, False, no_update)
             else:
                 print("Password not matching")
